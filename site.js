@@ -71,10 +71,10 @@ function standings(d) {
 function matchTable(rows) {
   const body = h('tbody');
   for (const r of rows) {
-    const detail = h('tr', { class: 'detail', hidden: true }, h('td', { colspan: 3 }, h('table', h('tbody', r.detail))));
-    const btn = h('button', { class: 'scorebtn', 'aria-expanded': 'false', title: 'Show category breakdown', onclick: () => { detail.hidden = !detail.hidden; btn.setAttribute('aria-expanded', String(!detail.hidden)); } }, r.mid, h('i', { class: 'chev' }));
+    const detail = r.detail ? h('tr', { class: 'detail', hidden: true }, h('td', { colspan: 3 }, h('table', h('tbody', r.detail)))) : null;
+    const btn = !detail ? h('span', { class: 'scoretxt' }, r.mid) : h('button', { class: 'scorebtn', 'aria-expanded': 'false', title: 'Show category breakdown', onclick: () => { detail.hidden = !detail.hidden; btn.setAttribute('aria-expanded', String(!detail.hidden)); } }, r.mid, h('i', { class: 'chev' }));
     body.append(h('tr', h('td', { class: `side ${r.a.dim ? 'dim' : ''}` }, h('b', r.a.name), r.a.sub ? h('small', r.a.sub) : null), h('td', { class: 'mid' }, btn),
-      h('td', { class: `side r ${r.b.dim ? 'dim' : ''}` }, h('b', r.b.name), r.b.sub ? h('small', r.b.sub) : null)), detail);
+      h('td', { class: `side r ${r.b.dim ? 'dim' : ''}` }, h('b', r.b.name), r.b.sub ? h('small', r.b.sub) : null)), ...(detail ? [detail] : []));
   }
   return h('div', { class: 'mt' }, h('table', body));
 }
@@ -133,10 +133,9 @@ function wholeScore(m) {
 
 function forecast(d) {
   const f = d.forecast; if (!f || f.week < 3) return null; // the forecast is for the NEXT week; it starts with week 3's matchups
-  return sec('forecast', `Fearless Forecast: week ${f.week}`, 'Win chance for each matchup, from the weeks played so far. Tap the expected score (categories won, with ties if any) for each category. Schedules and injuries are not factored in.', matchTable(f.matchups.map((m) => ({
+  return sec('forecast', `Fearless Forecast: week ${f.week}`, 'Expected score (categories won, with ties if any) and win chance for each matchup, from the weeks played so far. Schedules and injuries are not factored in.', matchTable(f.matchups.map((m) => ({
     a: { name: m.a, sub: pct(m.p_a), dim: m.p_a < m.p_b }, b: { name: m.b, sub: pct(m.p_b), dim: m.p_b < m.p_a },
-    mid: wholeScore(m).filter((v, i) => i < 2 || v > 0).join('–'),
-    detail: d.categories.map((c) => { const x = m.cats[c]; return catRow(fmt(c, x.a), c, fmt(c, x.b), x.p_a > 0.5, x.p_a < 0.5, `${pct(x.p_a)} · ${pct(1 - x.p_a)}`); }) }))));
+    mid: wholeScore(m).filter((v, i) => i < 2 || v > 0).join('–') }))));
 }
 
 function awards(d) {

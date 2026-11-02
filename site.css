@@ -131,3 +131,6 @@ th.sorted { color: var(--ink); } th.sorted::after { content: ' ↑'; font-size: 
 /* the category winner in the tap-to-open breakdowns */
 .mt tr.detail table td.w { color: var(--pos); font-weight: 700; }
 .mt tr.detail table td.w small { color: inherit; opacity: .8; }
+
+.scoretxt { font-weight: 650; font-size: 17px; letter-spacing: -.01em; white-space: nowrap; display: inline-block; padding: 7px 14px; }
+@media (max-width: 640px) { .scoretxt { font-size: 15px; padding: 6px 11px; } }
