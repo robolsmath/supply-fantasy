@@ -132,7 +132,7 @@ function wholeScore(m) {
 }
 
 function forecast(d) {
-  const f = d.forecast; if (!f || d.week < 3) return null;
+  const f = d.forecast; if (!f || f.week < 3) return null; // the forecast is for the NEXT week; it starts with week 3's matchups
   return sec('forecast', `Fearless Forecast: week ${f.week}`, 'Win chance for each matchup, from the weeks played so far. Tap the expected score (categories won, with ties if any) for each category. Schedules and injuries are not factored in.', matchTable(f.matchups.map((m) => ({
     a: { name: m.a, sub: pct(m.p_a), dim: m.p_a < m.p_b }, b: { name: m.b, sub: pct(m.p_b), dim: m.p_b < m.p_a },
     mid: wholeScore(m).filter((v, i) => i < 2 || v > 0).join('–'),
@@ -232,7 +232,7 @@ async function show() {
   const [first, ...rest] = (data.counter.headline || `Week ${state.week}`).split(/(?<=!)\s+/);
   const dates = data.dates.start ? `${new Date(data.dates.start + 'T00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} – ${new Date(data.dates.end + 'T00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}` : null;
   const parts = [
-    [md ? 'review' : null, 'Week in review'], [data.forecast && data.week >= 3 ? 'forecast' : null, 'Forecast'], ['standings', 'Standings'], [data.results.length ? 'results' : null, 'Results'], ['stats', 'Stats'], ['matrix', 'Head-to-head'], ['awards', 'Awards'],
+    [md ? 'review' : null, 'Week in review'], [data.forecast && data.forecast.week >= 3 ? 'forecast' : null, 'Forecast'], ['standings', 'Standings'], [data.results.length ? 'results' : null, 'Results'], ['stats', 'Stats'], ['matrix', 'Head-to-head'], ['awards', 'Awards'],
     [data.projections && data.week > 10 ? 'projections' : null, 'Projections'], [data.picture && (data.picture.final || data.picture.weeks_left <= 6) ? 'picture' : null, 'Playoffs']].filter((x) => x[0]);
   const page = h('div', { class: 'page' },
     h('div', { class: 'hero' }, h('p', { class: 'eyebrow' }, `${seasonEntry.label} · Week ${state.week}${dates ? ' · ' + dates : ''}`),
