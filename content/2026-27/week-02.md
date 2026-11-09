@@ -17,5 +17,5 @@
 ### Early award favorites
 
 - **Marvi** leads Regular Season Champ, Scoring Champ (1,434) and Chef Curry (173 3-pointers).
-- **MJ** leads Rebound King (516) and DPOY (168).
+- **MJ** leads Rebound King (516) and DPOY (167).
 - **Jeffrey** leads Point God (2.15 AST/TO) and **Gian** leads Mr. Efficiency (.61 TS%).
