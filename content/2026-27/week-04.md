@@ -8,12 +8,22 @@
 ### The undefeated teams
 
 - **Jeffrey (4-0, #2)** is half a point behind Marvi for the top spot. His wins have gone 5-4, 5-4, 7-1-1 and now 7-2 over Paul.
-- **Sethe (4-0, #4)** won 6-3 over Aaron with the league's best scoring (747 points) and assists (206). He is the last team besides Jeffrey with a spotless record.
+- **Sethe (4-0, #4)** won 6-3 over Aaron with the league's best scoring (747 points) and assists (206).
 
 ### The winless club
 
 - **Mac and Aaron are now the only winless teams, both at 0-4.** Mac lost 3-6 to Ryan and Aaron lost 3-6 to Sethe.
-- **Mac had the weakest week in the league** (average category rank 9.11) and sits in last place with 10.5 points. Aaron is #9 at 12.5.
+- **Week 5 looks rough for both.** Mac faces Gian (#6) and Aaron faces MJ (#5).
+
+### Head-to-head history
+
+- **Aaron has beaten Sethe only once in six meetings** (1-5 all-time, including this week). His lone win was 6-2 in Week 11 last season.
+- **Gian has won three straight against MJ** and now leads their series 5-3.
+- **Shaun has beaten Marvi two times in a row** and leads that series 2-1.
+- **MJ has never beaten Aaron: 0-7-1 all-time.** They meet again in Week 5, and Aaron needs a win badly.
+- **Marvi and Ryan have tied both times they have played** (4-4-1 each time, both last season). Week 5 either breaks the pattern or makes it three.
+- **Jeffrey's unbeaten run meets a tough opponent in Week 5.** Junnil leads their series 2-1, and his two wins were 7-1 and 8-1.
+- Mac vs Gian and Paul vs Sethe will be first-ever meetings.
 
 ### Early award favorites
 
