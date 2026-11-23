@@ -20,10 +20,8 @@
 
 ### Injury report
 
-- **Sethe's roster is a hospital ward, and he is still 5-0.** Five of his players are Out, including Giannis Antetokounmpo (#23) and Paul George (#32). Shaun is next with four.
-- **The healthiest rosters** belong to Aaron, Gian and MJ, with just one player Out each.
-
-{{injuries}}
+- **Sethe and Mac have the most injury trouble,** with six players each tagged Out or questionable/probable. Sethe's list includes Giannis Antetokounmpo and Paul George, yet he is still 5-0. Mac is missing Tyrese Haliburton, Ja Morant and Kawhi Leonard.
+- **MJ's roster is spotless:** not a single injury tag. Gian and Aaron have just one each.
 
 ### Head-to-head history
 
