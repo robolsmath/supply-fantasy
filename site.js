@@ -115,7 +115,7 @@ function stats(d) {
 function matrix(d) {
   const m = d.matrix;
   const cell = (c, actual) => h('td', { class: `cell ${c[0] > c[1] ? 'win' : c[0] < c[1] ? 'loss' : 'tie'} ${actual ? 'actual' : ''}` }, `${c[0]}-${c[1]}${c[2] ? '-' + c[2] : ''}`);
-  return sec('matrix', 'Head-to-head', 'If every team had played every other team this week. Row team first; the outlined cell is the real opponent.', tbl(
+  return sec('matrix', 'Head-to-head', 'If every team had played every other team this week. Teams are in standings order, row team first; the outlined cell is the real opponent.', tbl(
     [{ t: 'Team', l: true }, ...m.teams, 'Beat'],
     m.teams.map((name, i) => [td(h('b', name), 'l'), ...m.teams.map((_, j) => (i === j ? h('td', { class: 'cell me' }) : cell(m.cells[i][j], m.actual[i] === j))),
       td(h('b', `${m.totals[i][0]}-${m.totals[i][1]}-${m.totals[i][2]}`))]), { cls: 'hm' }), true);
