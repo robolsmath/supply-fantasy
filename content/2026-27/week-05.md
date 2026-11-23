@@ -1,7 +1,7 @@
 ### The short version
 
 - **Aaron finally gets his first win.** He edged MJ 5-4 to leave the winless club.
-- **Sethe swept Paul 9-0.** Only the fourth 9-0 sweep in the league's recorded history (966 matchups), and he is up to #2. The previous three:
+- **Sethe swept Paul 9-0.** Only the fourth 9-0 sweep in the league's recorded history (966 matchups). The previous three:
   - Season 1 (2017-18), Week 22: Ryan swept JD
   - Season 5 (2021-22), Week 15: Jeffrey swept JD
   - Season 9 (2025-26), Week 21 (playoffs): Gian swept Jacob
@@ -20,13 +20,10 @@
 
 ### Injury report
 
-*Player tags as of Nov 23. Rankings are the league's overall player rankings.*
+- **Sethe's roster is a hospital ward, and he is still 5-0.** Five of his players are Out, including Giannis Antetokounmpo (#23) and Paul George (#32). Shaun is next with four.
+- **The healthiest rosters** belong to Aaron, Gian and MJ, with just one player Out each.
 
-- **Sethe's roster is a hospital ward, and he is still 5-0.** Five of his players are tagged Out, including Giannis Antetokounmpo (#23) and Paul George (#32), along with Dejounte Murray, RJ Barrett and Jalen Duren.
-- **Shaun has four players Out** (Stephen Curry #33, Cameron Boozer #38, P.J. Washington and Anthony Edwards), and he has still won four straight.
-- **Junnil is missing Shai Gilgeous-Alexander (#10)**, one of three players Out for him, along with Aday Mara and Kon Knueppel.
-- **Wembanyama, the #1 ranked player, is Questionable** on Marvi's team. Austin Reaves and Evan Mobley are Out for Marvi.
-- **The healthiest rosters** belong to Aaron, Gian and MJ, with just one player Out each (Chet Holmgren, Dylan Harper and Jaxson Hayes).
+{{injuries}}
 
 ### Head-to-head history
 
@@ -39,3 +36,7 @@
 - **MJ** leads Rebound King (1,336) and DPOY (396).
 - **Jeffrey** leads Point God (2.19 AST/TO).
 - **Mr. Efficiency is a dead heat:** Marvi (.5911) leads Gian (.5906) by a hair.
+
+### Roster strength
+
+{{roster-strength}}
