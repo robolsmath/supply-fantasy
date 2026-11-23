@@ -224,11 +224,11 @@ const chips = (s) => h('div', { class: 'chips' }, pages(s).map((w) => h('a', { h
 // ---------- tables a write-up can place with {{injuries}} and {{roster-strength}} (numbers come from the week's player snapshot)
 const nice = (iso) => (iso ? new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '');
 const stack = (a) => (a.length ? h('div', a.map((x) => h('div', x.name))) : '–');
-function slotInjuries(d) {
+function injuries(d) {
   const p = d.players; if (!p) return null;
-  return h('div', h('p', { class: 'muted', style: 'font-size:13px;margin:6px 0' }, `Player tags${p.saved ? ' as of ' + nice(p.saved) : ''}. Out includes Out for Season.`),
-    tbl([{ t: 'Team', l: true }, 'Out', { t: 'Count' }, 'Questionable / probable', { t: 'Count' }],
-      p.teams.map((t) => [td(team(t.manager, t.team), 'l'), td(stack(t.out)), td(h('b', t.out.length || '–')), td(stack(t.doubtful)), td(h('b', t.doubtful.length || '–'))])));
+  return sec('injuries', 'Injury status', `Player tags${p.saved ? ' as of ' + nice(p.saved) : ''}. Out includes Out for Season; questionable and probable players are game-time decisions.`,
+    tbl([{ t: 'Team', l: true }, 'Out', 'Count', 'Questionable / probable', 'Count'],
+      p.teams.map((t) => [td(team(t.manager, t.team), 'l'), td(stack(t.out)), td(h('b', t.out.length || '–')), td(stack(t.doubtful)), td(h('b', t.doubtful.length || '–'))])), true);
 }
 function slotRoster(d) {
   const p = d.players; if (!p) return null;
@@ -242,7 +242,7 @@ function slotRoster(d) {
       T.map((t) => [td(h('b', t.standing ?? '–')), td(team(t.manager, t.team), 'l'), cell(fix(t.avg_rank), rAvg(t)), cell(fix(t.median_rank, 0), rMed(t)), cell(fix(t.top_avg), rTop(t)),
         td(t.best ? [t.best.name, h('small', { class: 'muted' }, ` #${t.best.rank}`)] : '–', 'l'), ...p.tops.map((k) => cell(t.top[k] || '–', rC[k](t))), td(t.out.length ? h('span', { class: 'down' }, t.out.length) : '–')]), { cls: 'dense' }));
 }
-const SLOTS = { injuries: slotInjuries, 'roster-strength': slotRoster };
+const SLOTS = { 'roster-strength': slotRoster };
 function fillSlots(root, d) {
   for (const el of root.querySelectorAll('.slot')) { const node = SLOTS[el.dataset.slot]?.(d); node ? el.replaceChildren(node) : el.remove(); }
   return root;
@@ -260,7 +260,7 @@ async function show() {
   const [first, ...rest] = (data.counter.headline || `Week ${state.week}`).split(/(?<=!)\s+/);
   const dates = data.dates.start ? `${new Date(data.dates.start + 'T00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} – ${new Date(data.dates.end + 'T00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}` : null;
   const parts = [
-    [md ? 'review' : null, 'Week in review'], [data.forecast && data.forecast.week >= 3 ? 'forecast' : null, 'Forecast'], ['standings', 'Standings'], [data.results.length ? 'results' : null, 'Results'], ['stats', 'Stats'], ['matrix', 'Head-to-head'], ['awards', 'Awards'],
+    [md ? 'review' : null, 'Week in review'], [data.forecast && data.forecast.week >= 3 ? 'forecast' : null, 'Forecast'], ['standings', 'Standings'], [data.results.length ? 'results' : null, 'Results'], ['stats', 'Stats'], ['matrix', 'Head-to-head'], ['awards', 'Awards'], [data.players ? 'injuries' : null, 'Injuries'],
     [data.projections && data.week > 10 ? 'projections' : null, 'Projections'], [data.picture && (data.picture.final || data.picture.weeks_left <= 6) ? 'picture' : null, 'Playoffs']].filter((x) => x[0]);
   const page = h('div', { class: 'page' },
     h('div', { class: 'hero' }, h('p', { class: 'eyebrow' }, `${seasonEntry.label} · Week ${state.week}${dates ? ' · ' + dates : ''}`),
@@ -269,7 +269,7 @@ async function show() {
       chips(seasonEntry)),
     h('nav', { class: 'jump' }, parts.map(([id, label]) => h('a', { href: `#${id}`, onclick: (e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView(); } }, label))),
     md ? h('section', { id: 'review' }, h('div', { class: 'sec-head' }, h('h2', 'Week in review')), h('div', { class: 'card' }, h('div', { class: 'writeup' }, fillSlots(markdown(md), data)))) : h('section', { id: 'review' }, h('div', { class: 'card' }, h('p', { class: 'pending' }, 'The write-up for this week is coming soon. The numbers are below.'))),
-    forecast(data), standings(data), results(data), stats(data), matrix(data), awards(data), projections(data), picture(data));
+    forecast(data), standings(data), results(data), stats(data), matrix(data), awards(data), injuries(data), projections(data), picture(data));
   app.replaceChildren(page);
   window.scrollTo({ top: 0 });
   $('#foot').textContent = `Numbers generated ${new Date(data.generated).toLocaleString()} · ${seasonEntry.label}`;
