@@ -134,3 +134,5 @@ th.sorted { color: var(--ink); } th.sorted::after { content: ' ↑'; font-size: 
 
 .scoretxt { font-weight: 650; font-size: 17px; letter-spacing: -.01em; white-space: nowrap; display: inline-block; padding: 7px 14px; }
 @media (max-width: 640px) { .scoretxt { font-size: 15px; padding: 6px 11px; } }
+
+.slot { margin: 12px 0 4px; } .slot .scroll { margin: 0 -4px; } .writeup .slot table { font-size: 14px; } .writeup .slot td, .writeup .slot th { padding-left: 8px; padding-right: 8px; }

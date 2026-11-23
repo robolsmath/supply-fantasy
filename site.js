@@ -38,6 +38,8 @@ function markdown(src) {
     }
     if (!line.trim()) { flushPara(); closeList(); continue; }
     closeList();
+    const slot = /^\{\{([\w-]+)\}\}$/.exec(line.trim());
+    if (slot) { flushPara(); root.append(h('div', { class: 'slot', 'data-slot': slot[1] })); continue; }
     let m;
     if ((m = /^(#{1,4})\s+(.*)$/.exec(line))) { flushPara(); root.append(h(m[1].length <= 2 ? 'h3' : 'h4', { html: inline(m[2]) })); }
     else if ((m = /^>\s?(.*)$/.exec(line))) { flushPara(); root.append(h('blockquote', { html: inline(m[1]) })); }
@@ -219,6 +221,33 @@ async function showIntro(seasonEntry) {
 const pages = (s) => (s.intro ? [{ week: 0, label: s.intro.label }] : []).concat(s.weeks);
 const chips = (s) => h('div', { class: 'chips' }, pages(s).map((w) => h('a', { href: `#/${s.id}/${w.week}`, class: `${w.week === state.week ? 'sel' : ''} ${w.week > (s.regular_season_end || 99) ? 'po' : ''}` }, w.week === 0 ? 'Intro' : w.week)));
 
+// ---------- tables a write-up can place with {{injuries}} and {{roster-strength}} (numbers come from the week's player snapshot)
+const nice = (iso) => (iso ? new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '');
+const stack = (a) => (a.length ? h('div', a.map((x) => h('div', x.name))) : '–');
+function slotInjuries(d) {
+  const p = d.players; if (!p) return null;
+  return h('div', h('p', { class: 'muted', style: 'font-size:13px;margin:6px 0' }, `Player tags${p.saved ? ' as of ' + nice(p.saved) : ''}. Out includes Out for Season.`),
+    tbl([{ t: 'Team', l: true }, 'Out', { t: 'Count' }, 'Questionable / probable', { t: 'Count' }],
+      p.teams.map((t) => [td(team(t.manager, t.team), 'l'), td(stack(t.out)), td(h('b', t.out.length || '–')), td(stack(t.doubtful)), td(h('b', t.doubtful.length || '–'))])));
+}
+function slotRoster(d) {
+  const p = d.players; if (!p) return null;
+  const T = p.teams; const n = T.length;
+  const rk = (get, high = false) => { const v = T.map(get).filter((x) => x != null).sort((a, b) => (high ? b - a : a - b)); return (t) => { const x = get(t); return x == null ? null : v.indexOf(x) + 1; }; };
+  const rAvg = rk((t) => t.avg_rank); const rMed = rk((t) => t.median_rank); const rTop = rk((t) => t.top_avg); const rC = Object.fromEntries(p.tops.map((k) => [k, rk((t) => t.top[k], true)]));
+  const cell = (text, rank) => h('td', { style: heat(rank, n) }, text);
+  const fix = (v, dgt = 1) => (v == null ? '–' : Number(v).toFixed(dgt));
+  return h('div', h('p', { class: 'muted', style: 'font-size:13px;margin:6px 0' }, 'By the current ranking of the players each team holds (lower is better; the colour compares teams). Top 8 avg is the average of a team’s eight best players. Rank is the place in the league standings.'),
+    tbl(['Rank', { t: 'Team', l: true }, 'Avg ranking', 'Median', 'Top 8 avg', { t: 'Best player', l: true }, ...p.tops.map((k) => `Top ${k}`), 'Out'],
+      T.map((t) => [td(h('b', t.standing ?? '–')), td(team(t.manager, t.team), 'l'), cell(fix(t.avg_rank), rAvg(t)), cell(fix(t.median_rank, 0), rMed(t)), cell(fix(t.top_avg), rTop(t)),
+        td(t.best ? [t.best.name, h('small', { class: 'muted' }, ` #${t.best.rank}`)] : '–', 'l'), ...p.tops.map((k) => cell(t.top[k] || '–', rC[k](t))), td(t.out.length ? h('span', { class: 'down' }, t.out.length) : '–')]), { cls: 'dense' }));
+}
+const SLOTS = { injuries: slotInjuries, 'roster-strength': slotRoster };
+function fillSlots(root, d) {
+  for (const el of root.querySelectorAll('.slot')) { const node = SLOTS[el.dataset.slot]?.(d); node ? el.replaceChildren(node) : el.remove(); }
+  return root;
+}
+
 // ---------- page
 async function show() {
   const app = $('#app');
@@ -239,7 +268,7 @@ async function show() {
       h('p', { class: 'sub' }, `${data.standings[0].manager} leads the standings with ${num(data.standings[0].points, 1)} points.`),
       chips(seasonEntry)),
     h('nav', { class: 'jump' }, parts.map(([id, label]) => h('a', { href: `#${id}`, onclick: (e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView(); } }, label))),
-    md ? h('section', { id: 'review' }, h('div', { class: 'sec-head' }, h('h2', 'Week in review')), h('div', { class: 'card' }, h('div', { class: 'writeup' }, markdown(md)))) : h('section', { id: 'review' }, h('div', { class: 'card' }, h('p', { class: 'pending' }, 'The write-up for this week is coming soon. The numbers are below.'))),
+    md ? h('section', { id: 'review' }, h('div', { class: 'sec-head' }, h('h2', 'Week in review')), h('div', { class: 'card' }, h('div', { class: 'writeup' }, fillSlots(markdown(md), data)))) : h('section', { id: 'review' }, h('div', { class: 'card' }, h('p', { class: 'pending' }, 'The write-up for this week is coming soon. The numbers are below.'))),
     forecast(data), standings(data), results(data), stats(data), matrix(data), awards(data), projections(data), picture(data));
   app.replaceChildren(page);
   window.scrollTo({ top: 0 });
