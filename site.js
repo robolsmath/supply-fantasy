@@ -53,7 +53,8 @@ function markdown(src) {
 const isPct = (c) => state.data.percent.includes(c);
 const fmt = (c, v) => (v == null ? '–' : isPct(c) ? v.toFixed(3).replace(/^0/, '') : Number.isInteger(v) ? String(v) : v.toFixed(1));
 const heat = (rank, n = 12) => { const t = n > 1 ? (rank - 1) / (n - 1) : 0.5; return t < 0.5 ? `background:rgba(52,199,89,${((0.5 - t) * 0.42).toFixed(2)})` : `background:rgba(255,59,48,${((t - 0.5) * 0.34).toFixed(2)})`; };
-const team = (m, t) => h('span', { class: 'team' }, h('span', { class: 'nm' }, h('b', m), t && t !== m ? h('small', t) : null));
+const logo = (m, cls = 'logo') => (state.man?.logos?.[m] ? h('img', { class: cls, src: state.man.logos[m], alt: '' }) : null);
+const team = (m, t) => h('span', { class: 'team' }, state.man?.logos?.[m] ? h('img', { class: 'logo', src: state.man.logos[m], alt: '' }) : null, h('span', { class: 'nm' }, h('b', m), t && t !== m ? h('small', t) : null));
 const rankBadge = (r) => h('span', { class: `rank${r <= 3 ? ' r' + r : ''}` }, r);
 const awardValue = (a, v) => (typeof v !== 'number' ? v : a === 'Mr. Efficiency' ? pct(v, 1) : a === 'Point God' ? v.toFixed(2) : num(v));
 
@@ -75,8 +76,8 @@ function matchTable(rows) {
   for (const r of rows) {
     const detail = r.detail ? h('tr', { class: 'detail', hidden: true }, h('td', { colspan: 3 }, h('table', h('tbody', r.detail)))) : null;
     const btn = !detail ? h('span', { class: 'scoretxt' }, r.mid) : h('button', { class: 'scorebtn', 'aria-expanded': 'false', title: 'Show category breakdown', onclick: () => { detail.hidden = !detail.hidden; btn.setAttribute('aria-expanded', String(!detail.hidden)); } }, r.mid, h('i', { class: 'chev' }));
-    body.append(h('tr', h('td', { class: `side ${r.a.dim ? 'dim' : ''}` }, h('b', r.a.name), r.a.sub ? h('small', r.a.sub) : null), h('td', { class: 'mid' }, btn),
-      h('td', { class: `side r ${r.b.dim ? 'dim' : ''}` }, h('b', r.b.name), r.b.sub ? h('small', r.b.sub) : null)), ...(detail ? [detail] : []));
+    body.append(h('tr', h('td', { class: `side ${r.a.dim ? 'dim' : ''}` }, h('div', { class: 'sw' }, logo(r.a.name), h('div', h('b', r.a.name), r.a.sub ? h('small', r.a.sub) : null))), h('td', { class: 'mid' }, btn),
+      h('td', { class: `side r ${r.b.dim ? 'dim' : ''}` }, h('div', { class: 'sw' }, logo(r.b.name), h('div', h('b', r.b.name), r.b.sub ? h('small', r.b.sub) : null)))), ...(detail ? [detail] : []));
   }
   return h('div', { class: 'mt' }, h('table', body));
 }
@@ -118,8 +119,8 @@ function matrix(d) {
   const m = d.matrix;
   const cell = (c, actual) => h('td', { class: `cell ${c[0] > c[1] ? 'win' : c[0] < c[1] ? 'loss' : 'tie'} ${actual ? 'actual' : ''}` }, `${c[0]}-${c[1]}${c[2] ? '-' + c[2] : ''}`);
   return sec('matrix', 'Head-to-head', 'If every team had played every other team this week. Teams are in standings order, row team first; the outlined cell is the real opponent.', tbl(
-    [{ t: 'Team', l: true }, ...m.teams, 'Beat'],
-    m.teams.map((name, i) => [td(h('b', name), 'l'), ...m.teams.map((_, j) => (i === j ? h('td', { class: 'cell me' }) : cell(m.cells[i][j], m.actual[i] === j))),
+    [{ t: 'Team', l: true }, ...m.teams.map((n) => ({ t: h('div', { class: 'colhead' }, logo(n, 'logo sm'), h('span', n)) })), 'Beat'],
+    m.teams.map((name, i) => [td(team(name), 'l'), ...m.teams.map((_, j) => (i === j ? h('td', { class: 'cell me' }) : cell(m.cells[i][j], m.actual[i] === j))),
       td(h('b', `${m.totals[i][0]}-${m.totals[i][1]}-${m.totals[i][2]}`))]), { cls: 'hm' }), true);
 }
 
